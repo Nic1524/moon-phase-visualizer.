@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon Phase Visualizer</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: transparent; /* Set to transparent */
+        }
+        .container {
+            text-align: center;
+        }
+        .moon {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 10px;
+            border: 2px solid #0010CF; /* Blue border */
+            border-radius: 50%; /* Circular border */
+        }
+        .phase-text {
+            color: #0010CF; /* Same color as the border */
+            font-size: 18px;
+            text-shadow: 0 0 5px rgba(0, 16, 207, 0.5);
+        }
+        .phase-name {
+            color: #0010CF; /* Same color as the border */
+            font-size: 16px;
+            margin-top: 5px;
+            text-shadow: 0 0 5px rgba(0, 16, 207, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg class="moon" id="moonPhase" viewBox="0 0 100 100" aria-label="Current Moon Phase">
+            <defs>
+                <radialGradient id="moon-gradient" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" style="stop-color: #ffffff" />
+                    <stop offset="85%" style="stop-color: #e6e6e6" />
+                    <stop offset="100%" style="stop-color: #d4d4d4" />
+                </radialGradient>
+            </defs>
+            <circle cx="50" cy="50" r="45" fill="url(#moon-gradient)" />
+            <path id="phasePath" class="moon-background" fill="transparent" />
+        </svg>
+        <div class="phase-text">Moon Phase</div>
+        <div class="phase-name" id="phaseName"></div>
+    </div>
+
+    <script>
+        function calculateMoonPhase() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+
+            const knownNewMoon = new Date(2000, 0, 6, 18, 14);
+            const current = new Date(year, month - 1, day);
+            const daysSinceNewMoon = (current - knownNewMoon) / (1000 * 60 * 60 * 24);
+
+            return (daysSinceNewMoon % 29.53) / 29.53;
+        }
+
+        function updateMoonPhase() {
+            const phase = calculateMoonPhase();
+            const moonPath = document.getElementById('phasePath');
+            const phaseName = document.getElementById('phaseName');
+
+            let d = '';
+            let name = '';
+            if (phase < 0.01 || phase > 0.99) {
+                name = "New Moon";
+                d = "M50,50 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"; // Hidden circle
+            } else if (Math.abs(phase - 0.25) < 0.01) {
+                name = "First Quarter";
+                d = "M50,5 A45,45 0 0,1 50,95 L50,50 Z";
+            } else if (Math.abs(phase - 0.5) < 0.01) {
+                name = "Full Moon";
+                d = "M50,5 A45,45 0 1,1 50,95 A45,45 0 1,1 50,5";
+            } else if (Math.abs(phase - 0.75) < 0.01) {
+                name = "Last Quarter";
+                d = "M50,5 A45,45 0 0,0 50,95 L50,50 Z";
+            } else if (phase < 0.5) {
+                const ratio = phase * 4;
+                name = "Waxing Crescent";
+                d = `M50,5 A45,45 0 1,1 50,95 A${45 * ratio},45 0 1,0 50,5`;
+            } else {
+                const ratio = (phase - 0.5) * 4;
+                name = "Waning Crescent";
+                d = `M50,5 A${45 * (1 - ratio)},45 0 1,0 50,95 A45,45 0 1,0 50,5`;
+            }
+
+            phaseName.textContent = name;
+            moonPath.setAttribute('d', d);
+        }
+
+        updateMoonPhase();
+    </script>
+</body>
+</html>
