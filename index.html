@@ -18,20 +18,20 @@
             text-align: center;
         }
         .moon {
-            width: 150px;
-            height: 150px;
-            margin-top: 10px;
+            width: 30px;
+            height: 30px;
+            margin-top: 5px;
             border: 2px solid #0010CF;
             border-radius: 50%;
         }
         .phase-text {
             color: #0010CF;
-            font-size: 18px;
-            margin-top: 15px;
+            font-size: 12px;
+            margin-top: 5px;
         }
         .phase-name {
             color: #0010CF;
-            font-size: 16px;
+            font-size: 12px;
             margin-top: 5px;
         }
     </style>
@@ -84,7 +84,7 @@
     <script>
         function calculateMoonPhase() {
             const date = new Date();
-            const knownNewMoon = new Date(2024, 11, 30, 10, 26); // Known new moon date: 30/12/2024
+            const knownNewMoon = new Date(2024, 12, 01, 06, 22); // Known new moon date: 01/12/2024
             const daysSinceNewMoon = (date - knownNewMoon) / (1000 * 60 * 60 * 24);
             return ((daysSinceNewMoon % 29.53) + 29.53) % 29.53 / 29.53;
         }
