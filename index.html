@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,33 +18,21 @@
             text-align: center;
         }
         .moon {
-            width: 30px;
-            height: 30px;
-            margin-top: 5px;
+            width: 150px;
+            height: 150px;
+            margin-top: 10px;
             border: 2px solid #0010CF;
             border-radius: 50%;
         }
         .phase-text {
             color: #0010CF;
-            font-size: 14px;
-            margin-top: 5px;
+            font-size: 18px;
+            margin-top: 15px;
         }
         .phase-name {
             color: #0010CF;
-            font-size: 14px;
+            font-size: 16px;
             margin-top: 5px;
-        }
-        @media (max-width: 600px) {
-            .moon {
-                width: 50px;
-                height: 50px;
-            }
-            .phase-text {
-                font-size: 14px;
-            }
-            .phase-name {
-                font-size: 12px;
-            }
         }
     </style>
 </head>
@@ -121,8 +110,8 @@
                 d = `M50,5 A${45 * (1 - ratio)},45 0 1,0 50,95 A45,45 0 1,0 50,5`; // Waning Crescent
             }
 
-            phaseName.textContent = name;
-            moonPath.setAttribute('d', d);
+            phaseName.textContent = name;  // Update phase name
+            moonPath.setAttribute('d', d); // Update moon phase shading
         }
 
         async function updateMoonPhaseInFirestore() {
