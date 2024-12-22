@@ -26,14 +26,12 @@
         .phase-text {
             color: #0010CF;
             font-size: 18px;
-            text-shadow: none;
             margin-top: 15px;
         }
         .phase-name {
             color: #0010CF;
             font-size: 16px;
             margin-top: 5px;
-            text-shadow: none;
         }
         @media (max-width: 600px) {
             .moon {
@@ -52,20 +50,20 @@
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"></script>
 <script>
-  const firebaseConfig = {
-      apiKey: "AIzaSyDgrTIc79HYjZCp3A7bQWDGEy1KovzZGk4",
-      authDomain: "marine-unit-app.firebaseapp.com",
-      databaseURL: "https://marine-unit-app-default-rtdb.firebaseio.com",
-      projectId: "marine-unit-app",
-      storageBucket: "marine-unit-app.firebasestorage.app",
-      messagingSenderId: "23492722794",
-      appId: "1:23492722794:web:f9fb20b8c437e518f00a13",
-      measurementId: "G-8MH2VT0W4W"
-  };
+    const firebaseConfig = {
+        apiKey: "AIzaSyDgrTIc79HYjZCp3A7bQWDGEy1KovzZGk4",
+        authDomain: "marine-unit-app.firebaseapp.com",
+        databaseURL: "https://marine-unit-app-default-rtdb.firebaseio.com",
+        projectId: "marine-unit-app",
+        storageBucket: "marine-unit-app.firebasestorage.app",
+        messagingSenderId: "23492722794",
+        appId: "1:23492722794:web:f9fb20b8c437e518f00a13",
+        measurementId: "G-8MH2VT0W4W"
+    };
 
-  // Initialize Firebase
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 </script>
 
 <body>
@@ -84,10 +82,10 @@
                 </linearGradient>
             </defs>
             <circle cx="50" cy="50" r="45" fill="url(#moon-gradient)" />
-            <path id="phasePath" class="moon-background" fill="url(#shadow-gradient)" />
+            <path id="phasePath" fill="url(#shadow-gradient)" />
         </svg>
         <div class="phase-text" aria-live="polite">Moon Phase:</div>
-        <div class="phase-name" id="phaseName"></div>
+        <div class="phase-name" id="phaseName">Loading...</div>
     </div>
 
     <noscript>
@@ -97,9 +95,9 @@
     <script>
         function calculateMoonPhase() {
             const date = new Date();
-            const knownNewMoon = new Date(2024, 11, 30, 10, 26); // Latest known new moon: 30/12/2024 @ 10:26
+            const knownNewMoon = new Date(2024, 11, 30, 10, 26); // Known new moon date: 30/12/2024
             const daysSinceNewMoon = (date - knownNewMoon) / (1000 * 60 * 60 * 24);
-            return ((daysSinceNewMoon % 29.53) + 29.53) % 29.53 / 29.53; // Ensure positive remainder
+            return ((daysSinceNewMoon % 29.53) + 29.53) % 29.53 / 29.53;
         }
 
         function updateMoonPhaseDisplay(phase, name) {
@@ -108,19 +106,19 @@
 
             let d = '';
             if (phase < 0.01 || phase > 0.99) {
-                d = "M50,50 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"; // Hidden circle
+                d = "M50,50 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"; // Hidden circle for New Moon
             } else if (Math.abs(phase - 0.25) < 0.01) {
-                d = "M50,5 A45,45 0 0,1 50,95 L50,50 Z";
+                d = "M50,5 A45,45 0 0,1 50,95 L50,50 Z"; // First Quarter
             } else if (Math.abs(phase - 0.5) < 0.01) {
-                d = "M50,5 A45,45 0 1,1 50,95 A45,45 0 1,1 50,5";
+                d = "M50,5 A45,45 0 1,1 50,95 A45,45 0 1,1 50,5"; // Full Moon
             } else if (Math.abs(phase - 0.75) < 0.01) {
-                d = "M50,5 A45,45 0 0,0 50,95 L50,50 Z";
+                d = "M50,5 A45,45 0 0,0 50,95 L50,50 Z"; // Last Quarter
             } else if (phase < 0.5) {
                 const ratio = phase * 4;
-                d = `M50,5 A45,45 0 1,1 50,95 A${45 * ratio},45 0 1,0 50,5`;
+                d = `M50,5 A45,45 0 1,1 50,95 A${45 * ratio},45 0 1,0 50,5`; // Waxing Crescent
             } else {
                 const ratio = (phase - 0.5) * 4;
-                d = `M50,5 A${45 * (1 - ratio)},45 0 1,0 50,95 A45,45 0 1,0 50,5`;
+                d = `M50,5 A${45 * (1 - ratio)},45 0 1,0 50,95 A45,45 0 1,0 50,5`; // Waning Crescent
             }
 
             phaseName.textContent = name;
